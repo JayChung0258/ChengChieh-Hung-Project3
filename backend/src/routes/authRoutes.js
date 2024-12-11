@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const { hashPassword, comparePasswords } = require('../utils/hash');
 const jwt = require('jsonwebtoken');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -16,8 +17,13 @@ router.post('/register', async (req, res) => {
     const user = new User({ username, passwordHash });
     await user.save();
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    res.cookie('token', token, { httpOnly: true }).json({ message: 'Registered and logged in', user });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, 
+        sameSite: 'lax', 
+        maxAge: 24 * 60 * 60 * 1000
+    }).json({ message: 'Registered and logged in', user });
 });
 
 // Login
@@ -31,8 +37,13 @@ router.post('/login', async (req, res) => {
     const isMatch = await comparePasswords(password, user.passwordHash);
     if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    res.cookie('token', token, { httpOnly: true }).json({ message: 'Logged in', user });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, 
+        sameSite: 'lax', 
+        maxAge: 24 * 60 * 60 * 1000
+    }).json({ message: 'Logged in', user });
 });
 
 // Logout

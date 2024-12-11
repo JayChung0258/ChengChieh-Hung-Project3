@@ -1,0 +1,158 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    color: #333;
+}
+
+/* NAVBAR */
+nav {
+    background: #333;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 1rem;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+nav span {
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+nav button {
+    background: #555;
+    color: #fff;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 4px;
+}
+
+nav button:hover {
+    background: #444;
+}
+
+/* PAGE CONTAINER */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 1rem auto;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* FORMS */
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+form h2 {
+    margin-bottom: 1rem;
+}
+
+form input,
+form textarea {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 0.5rem;
+    border: none;
+    background: #333;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #555;
+}
+
+/* POST LIST */
+.post-list>div {
+    background: #fafafa;
+    border: 1px solid #eee;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+.post-list p {
+    margin: 0.5rem 0;
+}
+
+.post-list a {
+    color: #333;
+    font-weight: bold;
+}
+
+.post-list button {
+    margin-right: 0.5rem;
+    background: #e74c3c;
+    border: none;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.post-list button:hover {
+    background: #c0392b;
+}
+
+/* USER PROFILE */
+.user-profile h1 {
+    margin-bottom: 0.5rem;
+}
+
+.user-profile p {
+    margin-bottom: 1rem;
+}
+
+.user-profile textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 0.5rem;
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 0.5rem;
+    }
+
+    nav {
+        flex-wrap: wrap;
+    }
+
+    nav a,
+    nav span,
+    nav button {
+        margin: 0.5rem 0;
+    }
+}

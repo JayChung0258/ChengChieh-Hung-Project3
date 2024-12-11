@@ -6,6 +6,7 @@ const authMiddleware = require('./middleware/authMiddleware');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
+const authCheckRoutes = require('./routes/authCheckRoutes');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use(authMiddleware);
 
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', authCheckRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 

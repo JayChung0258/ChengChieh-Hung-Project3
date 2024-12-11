@@ -1,15 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import '../css/PostList.css';
 
 function PostList({ posts, currentUser, onEdit, onDelete }) {
     return (
-        <div>
+        <div className="post-list">
             {posts.map(post => (
-                <div key={post._id} style={{ border: '1px solid #ccc', marginBottom: '10px' }}>
-                    <p>{post.content}</p>
-                    <Link to={`/users/${post.author.username}`}>{post.author.username}</Link> - {new Date(post.createdAt).toLocaleString()}
+                <div className="post-card" key={post._id}>
+                    <div className="post-meta">
+                        <div className="post-avatar"></div>
+                        <a className="post-author" href={`/users/${post.author.username}`}>
+                            {post.author.username}
+                        </a>
+                        <span className="post-timestamp">
+                            {new Date(post.createdAt).toLocaleString()}
+                        </span>
+                    </div>
+                    <div className="post-content">
+                        {post.content}
+                    </div>
                     {currentUser && currentUser._id === post.author._id && (
-                        <div>
+                        <div className="post-actions">
                             <button onClick={() => {
                                 const newContent = prompt('Edit Post', post.content);
                                 if (newContent) onEdit(post._id, newContent);
@@ -20,7 +30,7 @@ function PostList({ posts, currentUser, onEdit, onDelete }) {
                 </div>
             ))}
         </div>
-    )
+    );
 }
 
 export default PostList;

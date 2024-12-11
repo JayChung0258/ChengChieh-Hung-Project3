@@ -6,15 +6,25 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import UserPage from './pages/UserPage';
 import { logout } from './api';
+import './css/App.css';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Attempt to fetch the current user (if logged in) on first load
   useEffect(() => {
-    // Check session by calling an endpoint or parsing JWT from cookies
-    // For simplicity, we might need a dedicated endpoint like /api/auth/me
-    // Here, let's skip and assume we have no direct endpoint. In a real app, implement it.
+    async function checkLogin() {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data.user);
+      } else {
+        setCurrentUser(null);
+      }
+    }
+    checkLogin();
   }, []);
 
   async function handleLogout() {
