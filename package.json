@@ -9,10 +9,10 @@
     ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "npm run build -ws --if-present",
+        "build": "npm run build -w frontend",
         "start": "npm run start -w backend",
         "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
-        "prod": "npm start"
+        "prod": "npm run start"
     },
     "repository": {
         "type": "git",
