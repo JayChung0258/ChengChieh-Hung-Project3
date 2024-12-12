@@ -3,15 +3,22 @@ const router = express.Router();
 const User = require('../models/User');
 const { hashPassword, comparePasswords } = require('../utils/hash');
 const jwt = require('jsonwebtoken');
-const authMiddleware = require('../middleware/authMiddleware');
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Register
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
+    if (!username || !password) {
+        console.log("Register failed: Missing fields");
+        return res.status(400).json({ error: 'Missing fields' });
+    }
 
     const existingUser = await User.findOne({ username });
-    if (existingUser) return res.status(400).json({ error: 'User already exists' });
+    if (existingUser) {
+        console.log("Register failed: User already exists");
+        return res.status(400).json({ error: 'User already exists' });
+    }
 
     const passwordHash = await hashPassword(password);
     const user = new User({ username, passwordHash });
@@ -20,35 +27,54 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.cookie('token', token, {
         httpOnly: true,
-        secure: true, 
-        sameSite: 'none', 
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000
     }).json({ message: 'Registered and logged in', user });
+
+    console.log(`User registered and logged in: ${user.username}`);
 });
 
 // Login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
+    if (!username || !password) {
+        console.log("Login failed: Missing fields");
+        return res.status(400).json({ error: 'Missing fields' });
+    }
 
     const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+    if (!user) {
+        console.log("Login failed: Invalid credentials (user not found)");
+        return res.status(400).json({ error: 'Invalid credentials' });
+    }
 
     const isMatch = await comparePasswords(password, user.passwordHash);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+    if (!isMatch) {
+        console.log("Login failed: Invalid credentials (password mismatch)");
+        return res.status(400).json({ error: 'Invalid credentials' });
+    }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.cookie('token', token, {
         httpOnly: true,
-        secure: true, 
-        sameSite: 'none', 
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000
     }).json({ message: 'Logged in', user });
+
+    console.log(`User logged in: ${user.username}`);
 });
 
 // Logout
 router.post('/logout', (req, res) => {
-    res.clearCookie('token').json({ message: 'Logged out' });
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    }).json({ message: 'Logged out' });
+
+    console.log("User logged out");
 });
 
 module.exports = router;

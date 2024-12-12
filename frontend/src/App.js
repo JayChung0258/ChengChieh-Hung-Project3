@@ -19,8 +19,10 @@ function App() {
       });
       if (res.ok) {
         const data = await res.json();
+        console.log("User data from /auth/me:", data.user);
         setCurrentUser(data.user);
       } else {
+        console.log("Failed to authenticate:", res.status);
         setCurrentUser(null);
       }
     }

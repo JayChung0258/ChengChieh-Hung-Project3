@@ -13,16 +13,18 @@ const authCheckRoutes = require('./routes/authCheckRoutes');
 
 const app = express();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: isProduction ? 'https://chengchiehhung-project3.onrender.com' : 'http://localhost:3000',
     credentials: true
 }));
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/auth', authCheckRoutes);
+app.use('/api/auth', authMiddleware, authRoutes);
+app.use('/api/auth', authMiddleware, authCheckRoutes);
 app.use('/api/posts', authMiddleware, postRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
 
