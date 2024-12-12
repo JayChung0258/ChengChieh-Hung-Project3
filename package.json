@@ -1,0 +1,26 @@
+{
+    "name": "ChengChiehHung-Project3",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "workspaces": [
+        "backend",
+        "frontend"
+    ],
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+        "build": "npm run build -ws --if-present",
+        "prod": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JayChung0258/ChengChiehHung-Project3.git"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {},
+    "devDependencies": {
+        "concurrently": "^8.0.1"
+    }
+}
